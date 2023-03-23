@@ -22,10 +22,9 @@ const fetcher = (variables, token) => {
       query userInfo($login: String!) {
         user(login: $login) {
           # fetch only owner repos & not forks
-          repositories(ownerAffiliations: OWNER, isFork: false, first: 100) {
+          repositories(ownerAffiliations: OWNER, isFork: false, privacy: PUBLIC, first: 100) {
             nodes {
               name
-              isPrivate
               languages(first: 10, orderBy: {field: SIZE, direction: DESC}) {
                 edges {
                   size
@@ -100,8 +99,7 @@ const fetchTopLanguages = async (username, exclude_repo = []) => {
   // filter out repositories to be hidden
   repoNodes = repoNodes
     .sort((a, b) => b.size - a.size)
-    .filter((repo) => !repoToHide[repo.name])
-    .filter((repo) => !repo.isPrivate);
+    .filter((repo) => !repoToHide[repo.name]);
 
   repoNodes = repoNodes
     .filter((node) => node.languages.edges.length > 0)
