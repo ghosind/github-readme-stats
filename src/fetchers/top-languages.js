@@ -24,7 +24,6 @@ const fetcher = (variables, token) => {
           repositories(ownerAffiliations: OWNER, isFork: false, privacy: PUBLIC, first: 100) {
             nodes {
               name
-              isPrivate
               languages(first: 10, orderBy: {field: SIZE, direction: DESC}) {
                 edges {
                   size
@@ -108,8 +107,7 @@ const fetchTopLanguages = async (
   // filter out repositories to be hidden
   repoNodes = repoNodes
     .sort((a, b) => b.size - a.size)
-    .filter((repo) => !repoToHide[repo.name])
-    .filter((repo) => !repo.isPrivate);
+    .filter((repo) => !repoToHide[repo.name]);
 
   let repoCount = 0;
 
