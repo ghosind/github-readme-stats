@@ -75,10 +75,15 @@ const createTextNode = ({
 };
 
 /**
+ * @typedef {import('../fetchers/types').StatsData} StatsData
+ * @typedef {import('./types').StatCardOptions} StatCardOptions
+ */
+
+/**
  * Renders the stats card.
  *
- * @param {import('../fetchers/types').StatsData} stats The stats data.
- * @param {Partial<import("./types").StatCardOptions>} options The card options.
+ * @param {StatsData} stats The stats data.
+ * @param {Partial<StatCardOptions>} options The card options.
  * @returns {string} The stats card SVG object.
  */
 const renderStatsCard = (stats, options = {}) => {
@@ -214,13 +219,15 @@ const renderStatsCard = (stats, options = {}) => {
     "ru",
     "uk-ua",
     "id",
+    "ml",
     "my",
     "pl",
     "de",
     "nl",
     "zh-tw",
+    "uz",
   ];
-  const isLongLocale = longLocales.includes(locale);
+  const isLongLocale = locale ? longLocales.includes(locale) : false;
 
   // filter out hidden stats defined by user & create the text nodes
   const statItems = Object.keys(STATS)
@@ -294,7 +301,11 @@ const renderStatsCard = (stats, options = {}) => {
       : statItems.length
       ? RANK_CARD_DEFAULT_WIDTH
       : RANK_ONLY_CARD_DEFAULT_WIDTH) + iconWidth;
-  let width = isNaN(card_width) ? defaultCardWidth : card_width;
+  let width = card_width
+    ? isNaN(card_width)
+      ? defaultCardWidth
+      : card_width
+    : defaultCardWidth;
   if (width < minCardWidth) {
     width = minCardWidth;
   }
@@ -351,8 +362,8 @@ const renderStatsCard = (stats, options = {}) => {
     ? ""
     : `<g data-testid="rank-circle"
           transform="translate(${calculateRankXTranslation()}, ${
-        height / 2 - 50
-      })">
+            height / 2 - 50
+          })">
         <circle class="rank-circle-rim" cx="-10" cy="8" r="40" />
         <circle class="rank-circle" cx="-10" cy="8" r="40" />
         <g class="rank-text">
