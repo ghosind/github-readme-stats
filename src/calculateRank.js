@@ -76,9 +76,11 @@ function calculateRank({
       REVIEWS_WEIGHT * exponential_cdf(reviews / REVIEWS_MEDIAN) +
       STARS_WEIGHT * log_normal_cdf(stars / STARS_MEDIAN) +
       FOLLOWERS_WEIGHT * log_normal_cdf(followers / FOLLOWERS_MEDIAN)) /
-      TOTAL_WEIGHT;
+    TOTAL_WEIGHT;
 
   const level = LEVELS[THRESHOLDS.findIndex((t) => rank * 100 <= t)];
+
+  console.log(`Rank calculation details: Commits: ${commits}, PRs: ${prs}, Issues: ${issues}, Reviews: ${reviews}, Stars: ${stars}, Followers: ${followers} Calculated rank: ${rank}, Level: ${level}`);
 
   return { level, percentile: rank * 100 };
 }
